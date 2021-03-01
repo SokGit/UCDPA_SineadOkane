@@ -26,6 +26,13 @@ print(Sydney_HP.groupby('suburb')['sellPrice'].agg([max]))
 #Drop Duplicate Sell Prices&Call Sydney_Hp1
 Sydney_Hp1=Sydney_HP.drop_duplicates(subset='sellPrice')
 print(Sydney_Hp1)
+#How Many Property Types in Sydney_Hp1
+print(Sydney_Hp1['propType'].value_counts())
+#Summaries by groups
+print(Sydney_Hp1[Sydney_Hp1['propType']=='house']['sellPrice'].mean())
+print(Sydney_Hp1[Sydney_Hp1['propType']=='townhouse']['sellPrice'].mean())
+print(Sydney_Hp1[Sydney_Hp1['propType']=='villa']['sellPrice'].mean())
+
 
 
 
