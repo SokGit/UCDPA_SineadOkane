@@ -2,10 +2,13 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+#Read the data and
 Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv')
 #Reviwing Data with Head,Describe and Info.
 print(Sydney_HP.head(5))
 print(Sydney_HP.describe(include=['float','object']))
+#Based on data set Index to Date
+Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv',parse_dates=['Date'],index_col='Date')
 print(Sydney_HP.info())
 print(Sydney_HP.shape)
 print(Sydney_HP.values)
@@ -32,6 +35,22 @@ print(Sydney_Hp1['propType'].value_counts())
 print(Sydney_Hp1[Sydney_Hp1['propType']=='house']['sellPrice'].mean())
 print(Sydney_Hp1[Sydney_Hp1['propType']=='townhouse']['sellPrice'].mean())
 print(Sydney_Hp1[Sydney_Hp1['propType']=='villa']['sellPrice'].mean())
+#Sorting in descending order
+Sydney_Hp1.sort_values('Date',ascending=False)
+print(Sydney_Hp1.groupby(['suburb','propType'])['sellPrice'].max())
+Prices_Suburb_PropType=Sydney_Hp1.pivot_table(values='sellPrice',index='suburb',columns='propType')
+print(Prices_Suburb_PropType)
+#Getting First Sell Price
+print(Sydney_Hp1.sellPrice.iloc[0])
+
+
+
+
+
+
+
+
+
 
 
 
