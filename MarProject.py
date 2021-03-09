@@ -56,9 +56,6 @@ print(Sydney_HP.isna().any())
 #Based on above Missing Values in Bed and Car, find out how many and Fill with Zero
 print(Sydney_HP.isna().sum())
 Sydney_HP.fillna(0)
-fig,ax=plt.subplots()
-ax.plot(Sydney_Hp1['propType'],Sydney_Hp1['sellPrice'],marker='v',linestyle='--', color='r')
-plt.show()
 #Sort By Most Recent Date First
 Sydney_HP=Sydney_HP.sort_values('Date',ascending=False)
 print(Sydney_HP.head())
@@ -67,12 +64,11 @@ Mean=(Sydney_HP['sellPrice'].mean())
 print(Mean)
 Sydney_HP.sort_index()
 print(Sydney_HP)
-#Zooming in a Decade of Data
 import datetime as dt
 #Getting First Sell Price
 print(Sydney_HP.sellPrice.iloc[0])
-#Sorting
-Sydney_HP.sort_values(['sellPrice','bath'],ascending=[False,True])
+#Sorting by Multiple Values
+Sydney_HP.sort_values(['Date','sellPrice'],ascending=[False,False])
 print(Sydney_HP.head())
 print(Sydney_HP['sellPrice'])
 #Greater then the Mean
@@ -96,7 +92,6 @@ print(Sydney_HP[is_House& is_Below_Average])
 Expensive_Houses=Sydney_HP[is_House&is_Highend]
 Below_AverageHouses=Sydney_HP[is_House& is_Below_Average]
 fig, ax=plt.subplots()
-plt.show()
 print(Expensive_Houses['suburb'].value_counts())
 print(Below_AverageHouses['suburb'].value_counts())
 #Subsetting using.isin() For Expensive Houses(See what years more expensive to live in area)
@@ -106,6 +101,24 @@ Sydney_HP_ind2=Sydney_HP.set_index('suburb')
 print(Sydney_HP_ind2.head())
 Sydney_HP_ind2=Sydney_HP_ind2.sort_values('sellPrice',ascending=False)
 print(Sydney_HP_ind2.head())
+#Ploting Data, we have imported Matplotlib previously
+#Subsetting based on Houses
+Sydney_Houses=Sydney_HP[Sydney_HP['propType']=='house']
+Sydney_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line')
+plt.show()
+Expensive_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line',color='r',xlabel=('Time(Years)'))
+plt.show()
+Below_AverageHouses['sellPrice'].plot()
+plt.show()
+#Above Too Much Data Given on above to acturately manipulate
+#2nd Data Set
+Perth_Houses=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\PerthHousePrices.csv',parse_dates=['DATE_SOLD'],index_col=['DATE_SOLD'])
+print(Perth_Houses.head())
+print(Perth_Houses.info())
+
+
+
+
 
 
 
