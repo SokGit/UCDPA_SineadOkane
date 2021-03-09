@@ -7,7 +7,7 @@ Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHouse
 #Reviwing Data with Head,Describe and Info.
 print(Sydney_HP.head(5))
 print(Sydney_HP.describe(include=['float','object']))
-#Based on data set Index to Date and Parse Date Columns as datetime.
+#Based on data set Index to Date and Parse Date Columns as date so pandas knows its a date time series
 Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv',parse_dates=['Date'],index_col='Date')
 print(Sydney_HP.info())
 print(Sydney_HP.shape)
@@ -25,27 +25,35 @@ HighMarket=Sydney_HP[Sydney_HP['sellPrice']>2000000000]
 print(HighMarket)
 #How Many Suburbs
 print(Sydney_HP['suburb'].value_counts())
-print(Sydney_HP.groupby('suburb')['sellPrice'].agg([max]))
+print(Sydney_HP.groupby('suburb')['sellPrice'].agg([max,min,sum]))
 #Drop Duplicate Sell Prices&Call Sydney_Hp1, to see range prices vs Property Type
 Sydney_Hp1=Sydney_HP.drop_duplicates(subset='sellPrice')
 print(Sydney_Hp1)
 #How Many Property Types in Sydney_Hp1
 print(Sydney_Hp1['propType'].value_counts())
 #Summaries by groups
-print(Sydney_Hp1[Sydney_Hp1['propType']=='house']['sellPrice'].mean())
-print(Sydney_Hp1[Sydney_Hp1['propType']=='townhouse']['sellPrice'].mean())
-print(Sydney_Hp1[Sydney_Hp1['propType']=='villa']['sellPrice'].mean())
+Average_House=(Sydney_Hp1[Sydney_Hp1['propType']=='house']['sellPrice'].mean())
+print(Average_House)
+Average_Townhouse=(Sydney_Hp1[Sydney_Hp1['propType']=='townhouse']['sellPrice'].mean())
+print(Average_Townhouse)
+Average_Villa=(Sydney_Hp1[Sydney_Hp1['propType']=='villa']['sellPrice'].mean())
+print(Average_Villa)
+#Looping based on Propety SellPrice
+x=Average_House
+y=Average_Townhouse
+if x>y:
+    print('House_is_Greater')
+else:
+    print('Townhouse_is_Greater')
 #Sorting in descending order
 Sydney_Hp1.sort_values('Date',ascending=False)
 print(Sydney_Hp1.groupby(['suburb','propType'])['sellPrice'].max())
 Prices_Suburb_PropType=Sydney_Hp1.pivot_table(values='sellPrice',index='suburb',columns='propType')
 print(Prices_Suburb_PropType)
-#Getting First Sell Price
-print(Sydney_Hp1.sellPrice.iloc[0])
-#Need to re arrange dates so they are monotonic
+#Returning to orginal as Droping Dup Values lost valuable data
 #Decting any missing Values
 print(Sydney_HP.isna().any())
-#Missing Values in Bed and Car how many, Fill with Zero
+#Based on above Missing Values in Bed and Car, find out how many and Fill with Zero
 print(Sydney_HP.isna().sum())
 Sydney_HP.fillna(0)
 fig,ax=plt.subplots()
@@ -55,13 +63,65 @@ plt.show()
 Sydney_HP=Sydney_HP.sort_values('Date',ascending=False)
 print(Sydney_HP.head())
 print(Sydney_HP.tail())
-print(Sydney_HP['sellPrice'].mean())
-#Zooming in on a 5 year period
-SydneyNov19_Nov18=Sydney_HP[2014-12-31:2019-12-31]
-print(SydneyNov19_Nov18.head())
-print(SydneyNov19_Nov18.info())
-print(SydneyNov19_Nov18.values)
-print(SydneyNov19_Nov18['propType'])
+Mean=(Sydney_HP['sellPrice'].mean())
+print(Mean)
+Sydney_HP.sort_index()
+print(Sydney_HP)
+#Zooming in a Decade of Data
+import datetime as dt
+#Getting First Sell Price
+print(Sydney_HP.sellPrice.iloc[0])
+#Sorting
+Sydney_HP.sort_values(['sellPrice','bath'],ascending=[False,True])
+print(Sydney_HP.head())
+print(Sydney_HP['sellPrice'])
+#Greater then the Mean
+print(Sydney_HP['sellPrice'] >(Mean))
+Sydney_GreaterAverage=Sydney_HP[Sydney_HP['sellPrice']>(Mean)]
+#Standard Dev
+print(Sydney_HP['sellPrice'].std())
+Distance_From_Mean=(Sydney_HP['sellPrice'].mean()+Sydney_HP['sellPrice'].std())
+print(Distance_From_Mean)
+#Subsetting based on Houses
+Sydney_Houses=Sydney_HP[Sydney_HP['propType']=='house']
+#Subsetting based on Multiple Conditions
+is_House=Sydney_HP['propType']=='house'
+is_GreaterAverage=Sydney_HP['sellPrice']>1365000
+print(Sydney_HP[is_House &is_GreaterAverage])
+#Subsettingbased on higher End House
+is_Highend=Sydney_HP['sellPrice']>(Distance_From_Mean)
+print(Sydney_HP[is_House&is_Highend])
+is_Below_Average=Sydney_HP['sellPrice']<(Mean)
+print(Sydney_HP[is_House& is_Below_Average])
+Expensive_Houses=Sydney_HP[is_House&is_Highend]
+Below_AverageHouses=Sydney_HP[is_House& is_Below_Average]
+fig, ax=plt.subplots()
+plt.show()
+print(Expensive_Houses['suburb'].value_counts())
+print(Below_AverageHouses['suburb'].value_counts())
+#Subsetting using.isin() For Expensive Houses(See what years more expensive to live in area)
+is_RoseBay_or_Point_Piper=Expensive_Houses['suburb'].isin(['Rose Bay','Point Piper'])
+print(is_RoseBay_or_Point_Piper)
+Sydney_HP_ind2=Sydney_HP.set_index('suburb')
+print(Sydney_HP_ind2.head())
+Sydney_HP_ind2=Sydney_HP_ind2.sort_values('sellPrice',ascending=False)
+print(Sydney_HP_ind2.head())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
