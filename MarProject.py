@@ -116,6 +116,37 @@ Perth_Houses=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\PerthHousePrices.csv'
 print(Perth_Houses.head())
 print(Perth_Houses.info())
 
+print(Sydney_HP.sellPrice.iloc[0:50])
+
+from datetime import datetime, timedelta
+Final_Dates_Sydney=datetime(2019,12,6)
+print(Final_Dates_Sydney)
+
+#Create a Sell Date for year before
+Dates_Sydney_2018= Final_Dates_Sydney -timedelta(weeks=52)
+print(Dates_Sydney_2018)
+print((Sydney_HP.sellPrice.iloc[1000]))
+print(Sydney_HP_ind2.sellPrice[0])
+
+#Reusable code for subsetting columns, dataframe and columns you wish to work with
+# df['col_a','col_b']
+
+#Suburb Castle Hill Area
+CastleHill_Suburb=Sydney_HP[Sydney_HP['suburb']=='Castle Hill']
+#Filter for rows where House price is less then average and Located in Castle Hill
+BelowAverage_CastleHill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
+print(BelowAverage_CastleHill)
+#Reuse Data above to input based on Townhouses and plot to axes
+fig,ax=plt.subplots()
+ax.plot(BelowAverage_CastleHill.index,BelowAverage_CastleHill['sellPrice'],color='green',linestyle='--',)
+ax.set_xlabel('Date(Years)')
+ax.set_ylabel('Price($500k-$1.2million)')
+ax.set_title('Average cost of houses Castle Hill')
+plt.show()
+
+#Getting Biggest range of Dates in 2019
+Year_2019Data=Sydney_HP.loc['2019-12-06']
+
 
 
 
