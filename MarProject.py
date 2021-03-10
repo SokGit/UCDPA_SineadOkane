@@ -105,16 +105,12 @@ print(Sydney_HP_ind2.head())
 #Subsetting based on Houses
 Sydney_Houses=Sydney_HP[Sydney_HP['propType']=='house']
 Sydney_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line')
-plt.show()
+
 Expensive_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line',color='r',xlabel=('Time(Years)'))
-plt.show()
+
 Below_AverageHouses['sellPrice'].plot()
-plt.show()
+
 #Above Too Much Data Given on above to acturately manipulate
-#2nd Data Set
-Perth_Houses=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\PerthHousePrices.csv',parse_dates=['DATE_SOLD'],index_col=['DATE_SOLD'])
-print(Perth_Houses.head())
-print(Perth_Houses.info())
 
 print(Sydney_HP.sellPrice.iloc[0:50])
 
@@ -128,6 +124,8 @@ print(Dates_Sydney_2018)
 print((Sydney_HP.sellPrice.iloc[1000]))
 print(Sydney_HP_ind2.sellPrice[0])
 
+
+
 #Reusable code for subsetting columns, dataframe and columns you wish to work with
 # df['col_a','col_b']
 
@@ -137,15 +135,72 @@ CastleHill_Suburb=Sydney_HP[Sydney_HP['suburb']=='Castle Hill']
 BelowAverage_CastleHill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
 print(BelowAverage_CastleHill)
 #Reuse Data above to input based on Townhouses and plot to axes
+BelowAverage_CastleHillTH= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='townhouse')]
 fig,ax=plt.subplots()
 ax.plot(BelowAverage_CastleHill.index,BelowAverage_CastleHill['sellPrice'],color='green',linestyle='--',)
 ax.set_xlabel('Date(Years)')
 ax.set_ylabel('Price($500k-$1.2million)')
 ax.set_title('Average cost of houses Castle Hill')
-plt.show()
+
 
 #Getting Biggest range of Dates in 2019
 Year_2019Data=Sydney_HP.loc['2019-12-06']
+
+
+
+#Too Much Data to present to clients
+#Focus on Suburb, using pandas to Drop the index colum from Date and reset to Suburbs
+print(Sydney_HP.reset_index())
+Sydney_suburb=Sydney_HP.set_index('suburb')
+print(Sydney_suburb.columns)
+#Id,bed,bath,car not relevant for clients Dropping Columns
+columns_to_drop=['Id','bed','bath','car']
+Sydney_suburb=Sydney_suburb.drop(columns=columns_to_drop)
+print(Sydney_suburb.head(10))
+print(Sydney_suburb.columns)
+print(Sydney_suburb.describe(include=['float','object']))
+print(Sydney_suburb['postalCode'].value_counts())
+#Sort By Highest Price First
+Sydney_suburb=Sydney_suburb.sort_values('sellPrice',ascending=False)
+print(Sydney_suburb.head())
+#We have already estblashied the mean/standard dev of the Data above
+#PropTypes subset to House below $300,000
+SydneyHP_Below300k=Sydney_suburb[(Sydney_suburb['sellPrice']<300000)&(Sydney_suburb['propType']=='house')]
+print(SydneyHP_Below300k.info())
+print(SydneyHP_Below300k['postalCode'].value_counts())
+print(SydneyHP_Below300k)
+Suburbs_Below300k=Sydney_suburb.index.get_level_values('suburb')
+print(Suburbs_Below300k)
+Suburbs_Below300k.tolist()
+
+#Make a list of Suburbs in Sydney
+Suburbs_To_Keep=['Villawood','Eschol Park','Buxton','Tahmoor']
+#Subset Suburbs Into Sydney Houses Price using square brackets to get a value in the Suburbs List
+Suburbs_Requested=Sydney_suburb.loc[Suburbs_To_Keep]
+print(Suburbs_Requested)
+#Setting arrays on Suburbs with Villawood and Tahmoor
+Suburbs_To_Keep_Array=np.array(['Villawood','Eschol Park','Buxton','Tahmoor'])
+indexing_array=np.array([0,3])
+Suburbs_Subset=Suburbs_To_Keep_Array[indexing_array]
+print(Suburbs_Subset)
+#SSydney_suburb_Plot=Sydney_suburb.groupby('suburb')=
+
+#Sprint(Sydney_HP.groupby('suburb')['sellPrice'].agg([max,min,sum]))
+Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
+print(Sydney_suburb_stats)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
