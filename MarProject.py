@@ -113,6 +113,12 @@ Below_AverageHouses['sellPrice'].plot()
 #Too Much Data Given on above to acturately demonstrate findings
 
 print(Sydney_HP.sellPrice.iloc[0:50])
+
+#Basic Building Block:Pd timestamp
+from datetime import datetime
+time_stamp=pd.Timestamp(datetime(2019,12,2))
+pd.Timestamp('2019-01-01')==time_stamp
+
 #Import Datetime
 from datetime import datetime, timedelta
 Final_Dates_Sydney=datetime(2019,12,6)
@@ -213,8 +219,22 @@ print(Suburbs_Subset)
 Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
 print(Sydney_suburb_stats)
 
-print(Below300k_Castle_Hill)
+print(BelowAverage_CastleHill)
 
+#Import the data and replace 'n/a' with np.nan
+Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['Date'])
+#Inspect table structure&data types
+print(Perth.info())
+print(Perth.head())
+Sydney=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv',parse_dates=['Date'])
+print(Sydney.info())
+print(Sydney.head())
+#Add City Reference Columns
+Perth['City']='PERTH'
+Sydney['City']='SYDNEY'
+#Concatenate DataFrames
+Australia=pd.concat([Perth,Sydney])
+print(Australia.info())
 
 
 
