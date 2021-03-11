@@ -146,14 +146,15 @@ ax.set_title('Average cost of houses Castle Hill')
 
 SydneyHP_Below300k=Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['propType']=='house')]
 #Filter for rows where House price is less then 300k and Located in Castle Hill
-Below300k_Castle_Hill= Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
+BelowAverage_Castle_Hill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
 
 #Using Matplot Lib to create a line graph showing Rise and Fall of houses in Castle Hill Between 2013-2000
-ax.plot(Below300k_Castle_Hill.index,Below300k_Castle_Hill['sellPrice'],color='green',linestyle='--')
+ax.plot(BelowAverage_Castle_Hill.index,BelowAverage_Castle_Hill['sellPrice'],color='green',linestyle='--')
 ax.set_xlabel('Date(Years 2013-2020)')
-ax.set_ylabel('Price')
-ax.set_title('Cost of houses under 300k Castle Hill(Sydney)')
+ax.set_ylabel('Price(Range $93.4k-$125.2k)')
+ax.set_title('Cost of houses Below Average Castle Hill(Sydney)')
 plt.show()
+
 
 
 #Zooming in over 5 years of Data between 2014-2019
@@ -211,6 +212,8 @@ print(Suburbs_Subset)
 #Print(Sydney_HP.groupby('suburb')['sellPrice'].agg([mean]))
 Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
 print(Sydney_suburb_stats)
+
+print(Below300k_Castle_Hill)
 
 
 
