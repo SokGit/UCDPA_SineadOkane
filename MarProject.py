@@ -50,7 +50,7 @@ Sydney_Hp1.sort_values('Date',ascending=False)
 print(Sydney_Hp1.groupby(['suburb','propType'])['sellPrice'].max())
 Prices_Suburb_PropType=Sydney_Hp1.pivot_table(values='sellPrice',index='suburb',columns='propType')
 print(Prices_Suburb_PropType)
-#Returning to orginal as Droping Dup Values lost valuable data
+#Returning to orginal Dataset for now as Droping Dup Values lost valuable data in terms of mean/medium etc
 #Decting any missing Values
 print(Sydney_HP.isna().any())
 #Based on above Missing Values in Bed and Car, find out how many and Fill with Zero
@@ -110,10 +110,10 @@ Expensive_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line',color='r',
 
 Below_AverageHouses['sellPrice'].plot()
 
-#Above Too Much Data Given on above to acturately manipulate
+#Too Much Data Given on above to acturately demonstrate findings(plt.show removed)
 
 print(Sydney_HP.sellPrice.iloc[0:50])
-
+#Import Datetime
 from datetime import datetime, timedelta
 Final_Dates_Sydney=datetime(2019,12,6)
 print(Final_Dates_Sydney)
@@ -124,7 +124,8 @@ print(Dates_Sydney_2018)
 print((Sydney_HP.sellPrice.iloc[1000]))
 print(Sydney_HP_ind2.sellPrice[0])
 
-
+#Drop Duplicate Sell Prices to see range prices vs Property Type
+Sydney_HP=Sydney_HP.drop_duplicates(subset='sellPrice')
 
 #Reusable code for subsetting columns, dataframe and columns you wish to work with
 # df['col_a','col_b']
@@ -143,17 +144,38 @@ ax.set_ylabel('Price($500k-$1.2million)')
 ax.set_title('Average cost of houses Castle Hill')
 
 
+SydneyHP_Below300k=Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['propType']=='house')]
+#Filter for rows where House price is less then 300k and Located in Castle Hill
+Below300k_Castle_Hill= Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
+
+#Using Matplot Lib to create a line graph showing Rise and Fall of houses in Castle Hill Between 2013-2000
+ax.plot(Below300k_Castle_Hill.index,Below300k_Castle_Hill['sellPrice'],color='green',linestyle='--',)
+ax.set_xlabel('Date(Years 2013-2020)')
+ax.set_ylabel('Price')
+ax.set_title('Cost of houses under 300k Castle Hill(Sydney)')
+
+
+#Zooming in over 5 years of Data between 2014-2019
+Sydney_HP_Below300k=Sydney_HP.index.get_level_values('Date')
+print(Sydney_HP_Below300k)
+Sydney_HP_Below300k.tolist()
+DecHP_2019=Sydney_HP_Below300k[0:10]
+print(DecHP_2019)
+import datetime as dt
+start=Sydney_HP.index.searchsorted(dt.datetime(2019,12,31))
+end=Sydney_HP.index.searchsorted(dt.datetime(2014,12,31))
+SydneyOver5years=Sydney_HP.iloc[start:end]
+print(SydneyOver5years)
+
+
 #Getting Biggest range of Dates in 2019
 Year_2019Data=Sydney_HP.loc['2019-12-06']
 
-
-
-#Too Much Data to present to clients
-#Focus on Suburb, using pandas to Drop the index colum from Date and reset to Suburbs
+#Scenario Reset Index, using pandas to Drop the index colum from Date and reset to Suburbs
 print(Sydney_HP.reset_index())
 Sydney_suburb=Sydney_HP.set_index('suburb')
 print(Sydney_suburb.columns)
-#Id,bed,bath,car not relevant for clients Dropping Columns
+#Cleaning Data by dropping columns Id,bed,bath,car not relevant for clients Dropping Columns
 columns_to_drop=['Id','bed','bath','car']
 Sydney_suburb=Sydney_suburb.drop(columns=columns_to_drop)
 print(Sydney_suburb.head(10))
@@ -183,11 +205,15 @@ Suburbs_To_Keep_Array=np.array(['Villawood','Eschol Park','Buxton','Tahmoor'])
 indexing_array=np.array([0,3])
 Suburbs_Subset=Suburbs_To_Keep_Array[indexing_array]
 print(Suburbs_Subset)
-#SSydney_suburb_Plot=Sydney_suburb.groupby('suburb')=
 
-#Sprint(Sydney_HP.groupby('suburb')['sellPrice'].agg([max,min,sum]))
+
+#Print(Sydney_HP.groupby('suburb')['sellPrice'].agg([mean]))
 Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
 print(Sydney_suburb_stats)
+
+
+
+
 
 
 
