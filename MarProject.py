@@ -50,7 +50,7 @@ Sydney_Hp1.sort_values('Date',ascending=False)
 print(Sydney_Hp1.groupby(['suburb','propType'])['sellPrice'].max())
 Prices_Suburb_PropType=Sydney_Hp1.pivot_table(values='sellPrice',index='suburb',columns='propType')
 print(Prices_Suburb_PropType)
-#Returning to orginal Dataset for now as Droping Dup Values lost valuable data in terms of mean/medium etc
+#Use Orginal DF to get mean etc
 #Decting any missing Values
 print(Sydney_HP.isna().any())
 #Based on above Missing Values in Bed and Car, find out how many and Fill with Zero
@@ -110,7 +110,7 @@ Expensive_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line',color='r',
 
 Below_AverageHouses['sellPrice'].plot()
 
-#Too Much Data Given on above to acturately demonstrate findings(plt.show removed)
+#Too Much Data Given on above to acturately demonstrate findings
 
 print(Sydney_HP.sellPrice.iloc[0:50])
 #Import Datetime
@@ -149,10 +149,11 @@ SydneyHP_Below300k=Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['propTyp
 Below300k_Castle_Hill= Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
 
 #Using Matplot Lib to create a line graph showing Rise and Fall of houses in Castle Hill Between 2013-2000
-ax.plot(Below300k_Castle_Hill.index,Below300k_Castle_Hill['sellPrice'],color='green',linestyle='--',)
+ax.plot(Below300k_Castle_Hill.index,Below300k_Castle_Hill['sellPrice'],color='green',linestyle='--')
 ax.set_xlabel('Date(Years 2013-2020)')
 ax.set_ylabel('Price')
 ax.set_title('Cost of houses under 300k Castle Hill(Sydney)')
+plt.show()
 
 
 #Zooming in over 5 years of Data between 2014-2019
