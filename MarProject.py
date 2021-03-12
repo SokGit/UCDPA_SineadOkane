@@ -226,30 +226,28 @@ Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/
 #Inspect table structure&data types
 print(Perth.info())
 print(Perth.head())
-Sydney=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv',parse_dates=['Date'],index_col='Date')
-print(Sydney.info())
-print(Sydney.head())
+
 #Add City Reference Columns(check if needed)
 Perth['City']='PERTH'
-Sydney['City']='SYDNEY'
-#Concatenate DataFrames
-Australia_HP=pd.concat([Perth,Sydney])
+Sydney_HP['City']='SYDNEY'
+#Concatenate DataFrames, Perth and Sydney_HP from earlier
+Australia_HP=pd.concat([Perth,Sydney_HP])
 print(Australia_HP.info())
 # Create an empty list: Australia for looping
 Australia=[]
 
 #Mean
-Sydney_Mean=(Sydney['sellPrice'].mean())
+Sydney_Mean=(Sydney_HP['sellPrice'].mean())
 Perth_Mean=(Perth['sellPrice'].mean())
 print(Sydney_Mean)
 print(Perth_Mean)
-Sydney_Price=Sydney['sellPrice']
+Sydney_Price=Sydney_HP['sellPrice']
 Sydney_Price.tolist()
 print(Sydney_Price)
 Perth_Price=Perth['sellPrice']
 Perth_Price.tolist()
 print(Perth_Price)
-#Looping based on max Price
+#If statement based on max Price
 PerthMax=(Perth_Price.max())
 SydneyMax=(Sydney_Price.max())
 x=PerthMax
@@ -261,6 +259,7 @@ else:
     print('Sydney More Expensive')
 
 #We learn sydney overall is more expensive
+
 
 
 
