@@ -225,10 +225,13 @@ print(BelowAverage_CastleHill)
 Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['Date'])
 #Inspect table structure&data types
 print(Perth.info())
-print(Perth.head())
+
 print(Perth.sort_values('sellPrice'))
 Perth=Perth.drop_duplicates(subset='sellPrice')
-
+#Basing on South Lake in Perth
+Perth=Perth[(Perth['suburb']=='South Lake')]
+Sydney_HP=Sydney_HP[(Sydney_HP['suburb']=='Castle Hill')]
+print(Perth.head(3))
 #Add City Reference Columns(check if needed)
 Perth['City']='PERTH'
 Sydney_HP['City']='SYDNEY'
@@ -276,14 +279,26 @@ Australia_HP['Date']=Australia_HP['Date'].dt.year
 print(Australia_HP['Date'])
 Australia_HPMean=Australia_HP['sellPrice'].mean()
 
+BelowAverage_Australia= Australia_HP[(Australia_HP['sellPrice']<Australia_HPMean)&(Australia_HP['suburb']=='Castle Hill')&(Australia_HP['suburb']=='Camillo')]
+
 
 
 Australia_HP=Australia_HP.set_index('Date')
-print(Australia_HP.head())
+Australia_HP.dropna()
+print(Australia_HP.head(5))
 print(Australia_HPMean)
+print(Australia_HP.columns)
+#House prices below 5 million
+hi=Australia_HP[(Australia_HP['sellPrice']<5000000)]
+fig,ax=plt.subplots()
+print(hi)
+print(hi['suburb'].value_counts())
+ax.bar(hi.index,hi['sellPrice'])
+plt.show()
 
 
-#SydneyHP_Below300k=Sydney_suburb[(Sydney_suburb['sellPrice']<300000)&(Sydney_suburb['propType']=='house')]
+
+
 
 
 
