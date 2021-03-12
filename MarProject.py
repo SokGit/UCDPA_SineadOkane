@@ -274,10 +274,16 @@ Year=('Year: ', my_date.year)
 Australia_HP['Date']=pd.to_datetime(Australia_HP['Date'])
 Australia_HP['Date']=Australia_HP['Date'].dt.year
 print(Australia_HP['Date'])
+Australia_HPMean=Australia_HP['sellPrice'].mean()
+
+
+
 Australia_HP=Australia_HP.set_index('Date')
 print(Australia_HP.head())
+print(Australia_HPMean)
 
 
+#SydneyHP_Below300k=Sydney_suburb[(Sydney_suburb['sellPrice']<300000)&(Sydney_suburb['propType']=='house')]
 
 
 
