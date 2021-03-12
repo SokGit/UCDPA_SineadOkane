@@ -222,10 +222,12 @@ print(Sydney_suburb_stats)
 print(BelowAverage_CastleHill)
 
 #Import the data and replace 'n/a' with np.nan, set index to date
-Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['Date'],index_col='Date')
+Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['Date'])
 #Inspect table structure&data types
 print(Perth.info())
 print(Perth.head())
+print(Perth.sort_values('sellPrice'))
+Perth=Perth.drop_duplicates(subset='sellPrice')
 
 #Add City Reference Columns(check if needed)
 Perth['City']='PERTH'
@@ -259,6 +261,21 @@ else:
     print('Sydney More Expensive')
 
 #We learn sydney overall is more expensive
+from datetime import datetime
+datetime_object=datetime.now()
+print(datetime_object)
+my_string='2018-09-01'
+my_date=datetime.strptime(my_string,"%Y-%m-%d")
+print(my_date)
+print('Type: ',type(my_date))
+Year=('Year: ', my_date.year)
+
+
+Australia_HP['Date']=pd.to_datetime(Australia_HP['Date'])
+Australia_HP['Date']=Australia_HP['Date'].dt.year
+print(Australia_HP['Date'])
+Australia_HP=Australia_HP.set_index('Date')
+print(Australia_HP.head())
 
 
 
