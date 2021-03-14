@@ -228,10 +228,9 @@ print(Perth.info())
 
 print(Perth.sort_values('sellPrice'))
 Perth=Perth.drop_duplicates(subset='sellPrice')
-#Basing on South Lake in Perth
-Perth=Perth[(Perth['suburb']=='South Lake')]
-Sydney_HP=Sydney_HP[(Sydney_HP['suburb']=='Castle Hill')]
-print(Perth.head(3))
+#Sorting on House Prices alone
+Sydney_HP=Sydney_HP[(Sydney_HP['propType']=='house')]
+
 #Add City Reference Columns(check if needed)
 Perth['City']='PERTH'
 Sydney_HP['City']='SYDNEY'
@@ -240,6 +239,11 @@ Australia_HP=pd.concat([Perth,Sydney_HP])
 print(Australia_HP.info())
 # Create an empty list: Australia for looping
 Australia=[]
+#Sorting the years between 2000 and 2020
+Australia_HP2000_2020=Australia_HP[(Australia_HP['Date']=='2000:2004')&(Australia_HP['Date']=='2005:2009')&(Australia_HP['Date']=='2010:2014')&(Australia_HP['Date']=='2015:2020')]
+
+
+
 
 #Mean
 Sydney_Mean=(Sydney_HP['sellPrice'].mean())
@@ -273,28 +277,38 @@ print(my_date)
 print('Type: ',type(my_date))
 Year=('Year: ', my_date.year)
 
+#Iterate Over Rows
 
 Australia_HP['Date']=pd.to_datetime(Australia_HP['Date'])
 Australia_HP['Date']=Australia_HP['Date'].dt.year
 print(Australia_HP['Date'])
 Australia_HPMean=Australia_HP['sellPrice'].mean()
 
-BelowAverage_Australia= Australia_HP[(Australia_HP['sellPrice']<Australia_HPMean)&(Australia_HP['suburb']=='Castle Hill')&(Australia_HP['suburb']=='Camillo')]
-
-
-
 Australia_HP=Australia_HP.set_index('Date')
 Australia_HP.dropna()
 print(Australia_HP.head(5))
 print(Australia_HPMean)
 print(Australia_HP.columns)
-#House prices below 5 million
-hi=Australia_HP[(Australia_HP['sellPrice']<5000000)]
+#House prices below 800k
+hi=Australia_HP[(Australia_HP['sellPrice']<800000)]
 fig,ax=plt.subplots()
 print(hi)
 print(hi['suburb'].value_counts())
 ax.bar(hi.index,hi['sellPrice'])
 plt.show()
+
+#Iterate over rows with Dict dataframe in pandas
+#Using Subsetted CastleHill
+BelowAverage_CastleHillHead=BelowAverage_CastleHill.head(5)
+#Index(Date),SellPrice and PropType
+df=BelowAverage_CastleHillHead
+for i, row in df.iterrows():
+   print(i, row[3],row[7])
+#Using First Five Rows to indicate prices below Average in different months in 2019
+for index, row in BelowAverage_CastleHillHead.iterrows():
+    print(index,':',row['suburb'], 'costs', row['sellPrice'], 'to buy a',row['bed'],'bedroom house in Syndey')
+
+
 
 
 
