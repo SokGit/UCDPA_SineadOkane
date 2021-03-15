@@ -222,10 +222,16 @@ print(Sydney_suburb_stats)
 print(BelowAverage_CastleHill)
 
 #Import the data and replace 'n/a' with np.nan, set index to date
-Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['Date'])
+Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['DATE_SOLD'])
 #Inspect table structure&data types
 print(Perth.info())
 
+#re usable code .rename(columns={old_name: new_name}).Preparing Data to be merged.
+
+Perth=Perth.rename(columns={'SUBURB':'suburb'})
+Perth=Perth.rename(columns={'PRICE':'sellPrice'})
+Perth=Perth.rename(columns={'BEDROOM':'bed'})
+Perth=Perth.rename(columns={'DATE_SOLD':'Date'})
 print(Perth.sort_values('sellPrice'))
 Perth=Perth.drop_duplicates(subset='sellPrice')
 #Sorting on House Prices alone
@@ -277,7 +283,7 @@ print(my_date)
 print('Type: ',type(my_date))
 Year=('Year: ', my_date.year)
 
-#Iterate Over Rows
+#Setting Date to read only Year
 
 Australia_HP['Date']=pd.to_datetime(Australia_HP['Date'])
 Australia_HP['Date']=Australia_HP['Date'].dt.year
@@ -290,11 +296,14 @@ print(Australia_HP.head(5))
 print(Australia_HPMean)
 print(Australia_HP.columns)
 #House prices below 800k
-hi=Australia_HP[(Australia_HP['sellPrice']<800000)]
+AustraliaHP_Overtheyears=Australia_HP[(Australia_HP['sellPrice']<800000)]
 fig,ax=plt.subplots()
-print(hi)
-print(hi['suburb'].value_counts())
-ax.bar(hi.index,hi['sellPrice'])
+print(AustraliaHP_Overtheyears)
+print(AustraliaHP_Overtheyears['suburb'].value_counts())
+ax.bar(AustraliaHP_Overtheyears.index,AustraliaHP_Overtheyears['sellPrice'])
+ax.set_xlabel('Years 1990-2020(5 year range)')
+ax.set_ylabel('Price(Range $100k-$800k)')
+ax.set_title('Rise of houses Price in Australia over the years')
 plt.show()
 
 #Iterate over rows with Dict dataframe in pandas
@@ -307,6 +316,7 @@ for i, row in df.iterrows():
 #Using First Five Rows to indicate prices below Average in different months in 2019
 for index, row in BelowAverage_CastleHillHead.iterrows():
     print(index,':',row['suburb'], 'costs', row['sellPrice'], 'to buy a',row['bed'],'bedroom house in Syndey')
+
 
 
 
