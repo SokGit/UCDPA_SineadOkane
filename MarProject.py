@@ -237,7 +237,7 @@ Perth=Perth.drop_duplicates(subset='sellPrice')
 #Sorting on House Prices alone
 Sydney_HP=Sydney_HP[(Sydney_HP['propType']=='house')]
 
-#Add City Reference Columns(check if needed)
+#Add City Reference Columns to find which city is which.
 Perth['City']='PERTH'
 Sydney_HP['City']='SYDNEY'
 #Concatenate DataFrames, Perth and Sydney_HP from earlier
@@ -304,6 +304,7 @@ ax.bar(AustraliaHP_Overtheyears.index,AustraliaHP_Overtheyears['sellPrice'])
 ax.set_xlabel('Years 1990-2020(5 year range)')
 ax.set_ylabel('Price(Range $100k-$800k)')
 ax.set_title('Rise of houses Price in Australia over the years')
+plt.xticks(rotation=45)
 plt.show()
 
 #Iterate over rows with Dict dataframe in pandas
@@ -316,10 +317,37 @@ for i, row in df.iterrows():
 #Using First Five Rows to indicate prices below Average in different months in 2019
 for index, row in BelowAverage_CastleHillHead.iterrows():
     print(index,':',row['suburb'], 'costs', row['sellPrice'], 'to buy a',row['bed'],'bedroom house in Syndey')
-#All Stats in one go(Divide by 1000 to get in K's)
+#Inspect summary stats (Divide by 1000 to get in K's)
 Australia_HP1=Australia_HP['sellPrice']//1000
 print(Australia_HP1.describe())
 Quantiles=np.arange(start=.1,stop=.91,step=.1)
 Deciles=Australia_HP['sellPrice'].quantile(Quantiles)
-Deciles.plot(kind='bar', title='Australia Houses Prices')
+Deciles.plot(title='Australia Houses Prices')
 plt.show()
+Australia_HP.sort_values('sellPrice',ascending=False)
+Australia_HPSuburbs=Australia_HP['suburb'].unique()
+#Using Dict list and numpy to get the top 5 Most expensive Suburb in Australia
+print(Australia_HPSuburbs[0:5])
+#Using numpy to get first row
+Largest_Australia=Australia_HP.iloc[0]
+Lowest_Australia=Australia_HP.iloc[-1]
+print(Largest_Australia)
+print(Lowest_Australia)
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Using Boolan True or False to see if perth in columns
+print(Australia_HP['City']=='PERTH')
+
+#Filter out prices above the 75th percentile with Australia_Hp1
+Australia_HP1= Australia_HP1[Australia_HP1<Australia_HP1.quantile(.75)]
+ax=sns.displot(Australia_HP1)
+plt.show()
+print(Australia_HP['suburb'].value_counts())#We learn that Gregory Hills has the most enteries
+#Re usable code df['column name'].value_counts()(to get how many enteriest for element within that sector)
+
+
+
+
