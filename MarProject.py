@@ -240,11 +240,15 @@ Sydney_HP=Sydney_HP[(Sydney_HP['propType']=='house')]
 #Add City Reference Columns to find which city is which.
 Perth['City']='PERTH'
 Sydney_HP['City']='SYDNEY'
+Cities=['PERTH','SYDNEY']
+# Create an empty list: Australia for looping
+Australia=[]
+for city in cities
+    Australia.append()
 #Concatenate DataFrames, Perth and Sydney_HP from earlier
 Australia_HP=pd.concat([Perth,Sydney_HP])
 print(Australia_HP.info())
-# Create an empty list: Australia for looping
-Australia=[]
+
 #Sorting the years between 2000 and 2020
 Australia_HP2000_2020=Australia_HP[(Australia_HP['Date']=='2000:2004')&(Australia_HP['Date']=='2005:2009')&(Australia_HP['Date']=='2010:2014')&(Australia_HP['Date']=='2015:2020')]
 
@@ -316,10 +320,11 @@ for i, row in df.iterrows():
    print(i, row[3],row[7])
 #Using First Five Rows to indicate prices below Average in different months in 2019
 for index, row in BelowAverage_CastleHillHead.iterrows():
-    print(index,':',row['suburb'], 'costs', row['sellPrice'], 'to buy a',row['bed'],'bedroom house in Syndey')
+    print(index,':',row['suburb'], 'costs', row['sellPrice'], 'to buy a',row['bed'],'bedroom house in Castlehill in Syndey')
 #Inspect summary stats (Divide by 1000 to get in K's)
 Australia_HP1=Australia_HP['sellPrice']//1000
 print(Australia_HP1.describe())
+#Using Numpy.arange for steps #re usable code(np.arange(start=,stop=,step=)
 Quantiles=np.arange(start=.1,stop=.91,step=.1)
 Deciles=Australia_HP['sellPrice'].quantile(Quantiles)
 Deciles.plot(title='Australia Houses Prices')
