@@ -243,8 +243,7 @@ Sydney_HP['City']='SYDNEY'
 Cities=['PERTH','SYDNEY']
 # Create an empty list: Australia for looping
 Australia=[]
-for city in cities
-    Australia.append()
+
 #Concatenate DataFrames, Perth and Sydney_HP from earlier
 Australia_HP=pd.concat([Perth,Sydney_HP])
 print(Australia_HP.info())
@@ -354,5 +353,12 @@ print(Australia_HP['suburb'].value_counts())#We learn that Gregory Hills has the
 #Re usable code df['column name'].value_counts()(to get how many enteriest for element within that sector)
 
 
-
+#Grouping Data by Suburb displaying better by dividing by 1000 to present data more accurately
+Australia_HP['sellPrice_m']=Australia_HP['sellPrice'].div(1e3)
+#No longer need sellPrice, axis=1 to let its a columns to be dropped displaying info in millions
+Australia_HP=Australia_HP.drop('sellPrice',axis=1)
+#Grouping by suburb using .groupby() and Looping Data to get the mean sellPrice in each suburb
+Australia_by_suburb=Australia_HP.groupby('suburb')
+for suburb,data in Australia_by_suburb:
+    print(suburb,data.sellPrice_m.mean())
 
