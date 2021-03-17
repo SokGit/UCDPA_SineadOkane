@@ -328,10 +328,13 @@ Quantiles=np.arange(start=.1,stop=.91,step=.1)
 Deciles=Australia_HP['sellPrice'].quantile(Quantiles)
 Deciles.plot(title='Australia Houses Prices')
 plt.show()
-Australia_HP.sort_values('sellPrice',ascending=False)
+Australia_HP.sort_values('sellPrice',ascending=False,inplace=True)
 Australia_HPSuburbs=Australia_HP['suburb'].unique()
-#Using Dict list and numpy to get the top 5 Most expensive Suburb in Australia
-print(Australia_HPSuburbs[0:5])
+#Using Dict list and numpy to get the top 5 Most expensive Suburb in Australia,Dict allowing for review of large amount of date
+Top5MostExpensive=Australia_HPSuburbs[0:5]
+print(Top5MostExpensive)
+#House prices in middle
+print(Australia_HPSuburbs[400:407])
 #Using numpy to get first row
 Largest_Australia=Australia_HP.iloc[0]
 Lowest_Australia=Australia_HP.iloc[-1]
@@ -352,13 +355,30 @@ plt.show()
 print(Australia_HP['suburb'].value_counts())#We learn that Gregory Hills has the most enteries
 #Re usable code df['column name'].value_counts()(to get how many enteriest for element within that sector)
 
+#Now that we have gotten information of sell prices over the years lets subsut to six most expensive in both cities(Sydney and Perth), putting Highest price first
+Perth.sort_values('sellPrice',ascending=False,inplace=True)
+Sydney_HP.sort_values('sellPrice',ascending=False,inplace=True)
+#Using .head to get the top 3 most expensive suburbs in both cities.
+Perth_H=Perth.head(3)
+Sydney_H=Sydney_HP.head(3)
+Australia_HP=pd.concat([Perth_H,Sydney_H])
+
 
 #Grouping Data by Suburb displaying better by dividing by 1000 to present data more accurately
 Australia_HP['sellPrice_m']=Australia_HP['sellPrice'].div(1e3)
-#No longer need sellPrice, axis=1 to let its a columns to be dropped displaying info in millions
+#No longer need sellPrice as have 'sellPrice_m, axis=1 to let its a columns to be dropped displaying info in millions
 Australia_HP=Australia_HP.drop('sellPrice',axis=1)
-#Grouping by suburb using .groupby() and Looping Data to get the mean sellPrice in each suburb
+#Grouping by suburb using .groupby() and Looping Data to get the mean sellPrice in each suburb using pandas
 Australia_by_suburb=Australia_HP.groupby('suburb')
 for suburb,data in Australia_by_suburb:
     print(suburb,data.sellPrice_m.mean())
+#Next Skip the loop
+Mean_MostExpensive=Australia_by_suburb.sellPrice_m.mean()
+title='Average Price of Top Six Expensive Suburbs'
+Mean_MostExpensive.plot(kind='barh',title=title)
+plt.show()
+
+
+
+
 
