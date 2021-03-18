@@ -61,7 +61,7 @@ Sydney_HP.fillna(0)#re usbale code df.fillna()
 #Sort By Most Recent Date First
 Sydney_HP=Sydney_HP.sort_values('Date',ascending=False)
 print(Sydney_HP.head())
-print(Sydney_HP.tail())
+print(Sydney_HP.tail()) #re usbale code df.tail()
 Mean=(Sydney_HP['sellPrice'].mean())
 print(Mean)
 Sydney_HP.sort_index()
@@ -143,6 +143,8 @@ Sydney_HP=Sydney_HP.drop_duplicates(subset='sellPrice')
 CastleHill_Suburb=Sydney_HP[Sydney_HP['suburb']=='Castle Hill']
 #Filter for rows where House price is less then average and Located in Castle Hill
 BelowAverage_CastleHill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
+hi='hi'
+print(hi)
 print(BelowAverage_CastleHill)
 #Reuse Data above to input based on Townhouses and plot to axes
 BelowAverage_CastleHillTH= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='townhouse')]
@@ -154,13 +156,13 @@ ax.set_title('Average cost of houses Castle Hill')
 
 
 SydneyHP_Below300k=Sydney_HP[(Sydney_HP['sellPrice']<300000)&(Sydney_HP['propType']=='house')]
-#Filter for rows where House price is less then 300k and Located in Castle Hill
+# From above to be used for plotting Filter for rows where House price is less then average and Located in Castle Hill
 BelowAverage_Castle_Hill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
 
 #Using Matplot Lib to create a line graph showing Rise and Fall of houses in Castle Hill Between 2013-2000
 ax.plot(BelowAverage_Castle_Hill.index,BelowAverage_Castle_Hill['sellPrice'],color='green',linestyle='--')
 ax.set_xlabel('Date(Years 2013-2020)')
-ax.set_ylabel('Price(Range $93.4k-$125.2k)')
+ax.set_ylabel('Price(Range $934k-$1.25million)')
 ax.set_title('Cost of houses Below Average Castle Hill(Sydney)')
 plt.show()
 
@@ -183,7 +185,7 @@ print(SydneyOver5years)
 Year_2019Data=Sydney_HP.loc['2019-12-06']
 
 #Scenario Reset Index, using pandas to Drop the index colum from Date and reset to Suburbs
-print(Sydney_HP.reset_index())
+print(Sydney_HP.reset_index())#resuable code df.reset_index()
 Sydney_suburb=Sydney_HP.set_index('suburb')
 print(Sydney_suburb.columns)
 #Cleaning Data by dropping columns Id,bed,bath,car not relevant for clients Dropping Columns
@@ -222,7 +224,7 @@ print(Suburbs_Subset)
 Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
 print(Sydney_suburb_stats)
 
-print(BelowAverage_CastleHill)
+print(hi)
 
 #Import the data and replace 'n/a' with np.nan, set index to date
 Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['DATE_SOLD'])
