@@ -2,19 +2,20 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-#Import The Data
+#Import The Data #Reusable code df=pd.read_csv(),
 Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv')
-#Reviwing Data with Head,Describe and Info.
+#Reviwing Data with Head,Describe
 print(Sydney_HP.head(5))
 print(Sydney_HP.describe(include=['float','object']))
 #Based on data set Index to Date and Parse Date Columns as date so pandas knows its a date time series
 Sydney_HP=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\FinalProject\SydneyHousePrices.csv',parse_dates=['Date'],index_col='Date')
+#Inspecting the Data.
 print(Sydney_HP.info())
 print(Sydney_HP.shape)
 print(Sydney_HP.values)
 print(Sydney_HP.columns)
 print(Sydney_HP.index)
-#Sorting in ascending order.
+#Sorting in ascending order.#resulable code df.sort_values('column')
 print(Sydney_HP.sort_values('sellPrice'))
 #Sorting by multiple variables
 print(Sydney_HP.sort_values(['sellPrice','suburb']))
@@ -23,39 +24,40 @@ print(Sydney_HP['sellPrice'].max())
 #Subsetting based on Higher End of Market 2 Billion
 HighMarket=Sydney_HP[Sydney_HP['sellPrice']>2000000000]
 print(HighMarket)
-#How Many Suburbs
+#How Many enteries per suburb Suburbs#resuable code df['column'].value_counts()
 print(Sydney_HP['suburb'].value_counts())
+#Using the .groupby.and .agg method in pandas.
 print(Sydney_HP.groupby('suburb')['sellPrice'].agg([max,min,sum]))
-#Drop Duplicate Sell Prices&Call Sydney_Hp1, to see range prices vs Property Type
+#Drop Duplicate Sell Prices&Call Sydney_Hp1, to see range prices vs Property Type#reusable code df.drop_duplicates(subset='column')
 Sydney_Hp1=Sydney_HP.drop_duplicates(subset='sellPrice')
 print(Sydney_Hp1)
-#How Many Property Types in Sydney_Hp1
+#How Many Property Types in Sydney_Hp1#Reusing code above from suburbs
 print(Sydney_Hp1['propType'].value_counts())
-#Summaries by groups
+#Summaries by groups #reuable code df[df['column']=='data in column selected']
 Average_House=(Sydney_Hp1[Sydney_Hp1['propType']=='house']['sellPrice'].mean())
 print(Average_House)
 Average_Townhouse=(Sydney_Hp1[Sydney_Hp1['propType']=='townhouse']['sellPrice'].mean())
 print(Average_Townhouse)
 Average_Villa=(Sydney_Hp1[Sydney_Hp1['propType']=='villa']['sellPrice'].mean())
 print(Average_Villa)
-#Looping based on Propety SellPrice
+#If statements based on Propety SellPrice
 x=Average_House
 y=Average_Townhouse
 if x>y:
     print('House_is_Greater')
 else:
     print('Townhouse_is_Greater')
-#Sorting in descending order
+#Sorting in descending order, highest date first.
 Sydney_Hp1.sort_values('Date',ascending=False)
 print(Sydney_Hp1.groupby(['suburb','propType'])['sellPrice'].max())
 Prices_Suburb_PropType=Sydney_Hp1.pivot_table(values='sellPrice',index='suburb',columns='propType')
 print(Prices_Suburb_PropType)
 #Use Orginal DF to get mean etc
-#Decting any missing Values
+#Decting any missing Values#re usable code df.isna().any()
 print(Sydney_HP.isna().any())
 #Based on above Missing Values in Bed and Car, find out how many and Fill with Zero
 print(Sydney_HP.isna().sum())
-Sydney_HP.fillna(0)
+Sydney_HP.fillna(0)#re usbale code df.fillna()
 #Sort By Most Recent Date First
 Sydney_HP=Sydney_HP.sort_values('Date',ascending=False)
 print(Sydney_HP.head())
@@ -67,7 +69,7 @@ print(Sydney_HP)
 import datetime as dt
 #Getting First Sell Price
 print(Sydney_HP.sellPrice.iloc[0])
-#Sorting by Multiple Values
+#Sorting by Multiple Values, highest date and highest price
 Sydney_HP.sort_values(['Date','sellPrice'],ascending=[False,False])
 print(Sydney_HP.head())
 print(Sydney_HP['sellPrice'])
@@ -84,7 +86,7 @@ Sydney_Houses=Sydney_HP[Sydney_HP['propType']=='house']
 is_House=Sydney_HP['propType']=='house'
 is_GreaterAverage=Sydney_HP['sellPrice']>1365000
 print(Sydney_HP[is_House &is_GreaterAverage])
-#Subsettingbased on higher End House
+#Subsetting based on higher End House
 is_Highend=Sydney_HP['sellPrice']>(Distance_From_Mean)
 print(Sydney_HP[is_House&is_Highend])
 is_Below_Average=Sydney_HP['sellPrice']<(Mean)
@@ -97,6 +99,7 @@ print(Below_AverageHouses['suburb'].value_counts())
 #Subsetting using.isin() For Expensive Houses(See what years more expensive to live in area)
 is_RoseBay_or_Point_Piper=Expensive_Houses['suburb'].isin(['Rose Bay','Point Piper'])
 print(is_RoseBay_or_Point_Piper)
+#Set suburb as index#re suable code df.set_index('column name')
 Sydney_HP_ind2=Sydney_HP.set_index('suburb')
 print(Sydney_HP_ind2.head())
 Sydney_HP_ind2=Sydney_HP_ind2.sort_values('sellPrice',ascending=False)
