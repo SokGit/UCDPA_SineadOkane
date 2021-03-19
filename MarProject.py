@@ -114,8 +114,10 @@ Expensive_Houses['sellPrice'].plot(x='date',y='sellPrice',kind='line',color='r',
 Below_AverageHouses['sellPrice'].plot()
 
 #Too Much Data Given on above to acturately demonstrate findings
-
+#LOC&ILOC Recommended for larger datasets
 print(Sydney_HP.sellPrice.iloc[0:50])
+#Find price last day of dec 2019
+print(Sydney_HP.loc['2019-12-31','sellPrice'])
 
 #Basic Building Block:Pd timestamp
 from datetime import datetime
@@ -143,8 +145,6 @@ Sydney_HP=Sydney_HP.drop_duplicates(subset='sellPrice')
 CastleHill_Suburb=Sydney_HP[Sydney_HP['suburb']=='Castle Hill']
 #Filter for rows where House price is less then average and Located in Castle Hill
 BelowAverage_CastleHill= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='house')]
-hi='hi'
-print(hi)
 print(BelowAverage_CastleHill)
 #Reuse Data above to input based on Townhouses and plot to axes
 BelowAverage_CastleHillTH= Sydney_HP[(Sydney_HP['sellPrice']<Mean)&(Sydney_HP['suburb']=='Castle Hill')&(Sydney_HP['propType']=='townhouse')]
@@ -206,7 +206,7 @@ print(SydneyHP_Below300k['postalCode'].value_counts())
 print(SydneyHP_Below300k)
 Suburbs_Below300k=Sydney_suburb.index.get_level_values('suburb')
 print(Suburbs_Below300k)
-Suburbs_Below300k.tolist()
+Suburbs_Below300k.tolist() #resubale code df.tolist()
 
 #Make a list of Suburbs in Sydney
 Suburbs_To_Keep=['Villawood','Eschol Park','Buxton','Tahmoor']
@@ -224,7 +224,7 @@ print(Suburbs_Subset)
 Sydney_suburb_stats=SydneyHP_Below300k.groupby('suburb')['sellPrice'].agg([np.mean])
 print(Sydney_suburb_stats)
 
-print(hi)
+
 
 #Import the data and replace 'n/a' with np.nan, set index to date
 Perth=pd.read_csv(r'C:\Users\soksi\OneDrive\Desktop\All_Perth.csv',na_values='n/a',parse_dates=['DATE_SOLD'])
@@ -299,7 +299,7 @@ print(Australia_HP['Date'])
 Australia_HPMean=Australia_HP['sellPrice'].mean()
 
 Australia_HP=Australia_HP.set_index('Date')
-Australia_HP.dropna()
+Australia_HP.dropna() #Reusable code df.dropna()
 print(Australia_HP.head(5))
 print(Australia_HPMean)
 print(Australia_HP.columns)
@@ -328,14 +328,15 @@ for index, row in BelowAverage_CastleHillHead.iterrows():
 #Inspect summary stats (Divide by 1000 to get in K's)
 Australia_HP1=Australia_HP['sellPrice']//1000
 print(Australia_HP1.describe())
-#Using Numpy.arange for steps #re usable code(np.arange(start=,stop=,step=)
-Quantiles=np.arange(start=.1,stop=.91,step=.1)
+#Using Numpy.arange for steps #re usable code(np.arange(start=,stop=,step=)#Better example presented below
+Quantiles=np.arange(start=.20,stop=.80,step=.20)
 Deciles=Australia_HP['sellPrice'].quantile(Quantiles)
-Deciles.plot(title='Australia Houses Prices')
-plt.show()
+Deciles.plot(kind='barh',title='Australia Houses Prices Percentages')
+
+#Sorting values by sell Price
 Australia_HP.sort_values('sellPrice',ascending=False,inplace=True)
-Australia_HPSuburbs=Australia_HP['suburb'].unique()
-#Using Dict list and numpy to get the top 5 Most expensive Suburb in Australia,Dict allowing for review of large amount of date
+Australia_HPSuburbs=Australia_HP['suburb'].unique() #Reusable code df['column'].unique()
+#Using Dict list and numpy to get the top 5 Most expensive Suburb in Australia,
 Top5MostExpensive=Australia_HPSuburbs[0:5]
 print(Top5MostExpensive)
 #House prices in middle
@@ -371,16 +372,28 @@ Australia_HP=pd.concat([Perth_H,Sydney_H])
 
 #Grouping Data by Suburb displaying better by dividing by 1000 to present data more accurately
 Australia_HP['sellPrice_m']=Australia_HP['sellPrice'].div(1e3)
-#No longer need sellPrice as have 'sellPrice_m, axis=1 to let its a columns to be dropped displaying info in millions
+#No longer need sellPrice as have 'sellPrice_m, axis=1 to let its a columns to be dropped displaying
 Australia_HP=Australia_HP.drop('sellPrice',axis=1)
 #Grouping by suburb using .groupby() and Looping Data to get the mean sellPrice in each suburb using pandas
 Australia_by_suburb=Australia_HP.groupby('suburb')
 for suburb,data in Australia_by_suburb:
     print(suburb,data.sellPrice_m.mean())
 #Next Skip the loop
-Mean_MostExpensive=Australia_by_suburb.sellPrice_m.mean()
+Mean_MostExpensive=Australia_by_suburb.sellPrice_m.max()
 title='Average Price of Top Six Expensive Suburbs'
-Mean_MostExpensive.plot(kind='barh',title=title)
+xlabel='Suburbs'
+ylabel='(Average Price in K(OOOs)$)'
+Mean_MostExpensive.plot(kind='bar',xlabel=xlabel,ylabel=ylabel,title=title)
+plt.xticks(rotation=45)
+plt.show()
+
+#Using Numpy.arange for steps #re usable code(np.arange(start=,stop=,step=)
+Quantiles=np.arange(start=.10,stop=.99,step=.10)
+Deciles=Australia_HP['sellPrice_m'].quantile(Quantiles)
+Deciles.plot(kind='barh',title='Australia Houses Prices Percentages',color='green')
+plt.xticks(rotation=45)
+plt.ylabel('(Percentages steps of 10%)')
+plt.xlabel('(Price in K(000s) $)')
 plt.show()
 
 
